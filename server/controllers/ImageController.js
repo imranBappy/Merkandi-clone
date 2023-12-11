@@ -3,7 +3,8 @@ const Image = require("../models/Image");
 exports.createImage = async (req, res, next) => {
   try {
     const { name, url } = req.body;
-    const newImage = new Image({ name, url });
+    const user = req.user;
+    const newImage = new Image({ name, url, user });
     const image = await newImage.save();
     res.status(201).json(image);
   } catch (error) {
@@ -13,6 +14,8 @@ exports.createImage = async (req, res, next) => {
 
 exports.createImages = async (req, res, next) => {
   try {
+    const user = req.user;
+    req.body = req.body.map((image) => ({ ...image, user: user }));
     const newImages = await Image.insertMany(req.body);
     res.status(201).json(newImages);
   } catch (error) {
@@ -23,18 +26,23 @@ exports.createImages = async (req, res, next) => {
 exports.getImages = async (req, res, next) => {
   try {
     const currentPage = parseInt(req.query?.page) || 1;
-    const PER_PAGE = 40;
-    const images = await Image.find()
+    const PER_PAGE = 41;
+    const user = req.user;
+    const images = await Image.find({
+      user,
+    })
       .skip(PER_PAGE * currentPage - PER_PAGE)
       .limit(PER_PAGE)
       .sort({ createdAt: -1 });
     const total = await Image.countDocuments();
     res.status(200).json({
-      data: images,
+      images: images,
       total: total,
       page: currentPage,
     });
-  } catch (error) {}
+  } catch (error) {
+    next(error.message);
+  }
 };
 
 exports.searchImage = async (req, res, next) => {
@@ -50,9 +58,10 @@ exports.searchImage = async (req, res, next) => {
     const total = await Image.countDocuments({
       $text: { $search: term },
     });
+
     res.status(200).json({
       total: total,
-      data: images,
+      images: images,
       page: currentPage,
     });
   } catch (error) {

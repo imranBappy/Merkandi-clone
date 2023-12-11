@@ -11,7 +11,7 @@ const ImageCard = ({
   return (
     <div
       onClick={onSelected}
-      className={`relative h-auto w-[150px] rounded-lg  cursor-pointer ${
+      className={`relative h-[150px] w-[150px] rounded-lg  cursor-pointer ${
         styles.imageWrapper
       }  ${selected ? "ring-2 ring-indigo-700 shadow-lg " : "shadow"} `}
     >
@@ -22,15 +22,14 @@ const ImageCard = ({
         x
       </button>
       <Image
-        className="h-auto max-w-full p-5 "
+        className="h-auto max-w-full p-5   "
         src={src}
-        width={150}
-        height={150}
         loader={({ src, width, quality }) => {
           return `${src}?w=${width}&q=${quality || 75}`;
         }}
         loading="lazy"
         alt=""
+        fill={true}
       />
     </div>
   );

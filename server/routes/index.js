@@ -14,6 +14,7 @@ const routes = [
   { path: "/store", router: require("./storeRoutes.js") },
   { path: "/click", router: require("./clickRoutes.js") },
   { path: "/wholesaler", router: require("./wholesalerRoutes.js") },
+  { path: "/message", router: require("./messageRoute.js") },
 
   // { path: "/banner", router: require("./bannerRoutes.js"), },
   // { path: "/setting", router: require("./settingRoutes.js"), },

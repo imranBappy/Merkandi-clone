@@ -120,7 +120,7 @@ const StoreAdd = ({ country, countries }) => {
         message: "Something went wrong, please try again",
       });
     }
-  }, [addStoreError, addStoreSuccess, addStoreLoading, data?._id, store]);
+  }, [addStoreError, addStoreSuccess]);
 
   useEffect(() => {
     if (updateStoreSuccess) {

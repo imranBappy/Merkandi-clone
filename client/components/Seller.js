@@ -11,6 +11,7 @@ import {
 
 function Seller({ store }) {
   const { company, phone, country, about, location, street } = store;
+
   return (
     <div className="flex flex-col md:flex-row border hover:shadow-lg group bg-white  my-2 p-4">
       <div className="w-full md:w-3/12">
@@ -27,7 +28,7 @@ function Seller({ store }) {
         <div className="flex flex-col md:flex-row w-full">
           <div className="w-full md:w-[70%] md:px-4 py-4 md:pt-0 flex flex-col md:border-r">
             <Link
-              href={"#"}
+              href={`/wholesales/${store.user}`}
               className="text-xl font-bold hover:text-mm group-hover:text-mm leading-5"
             >
               {company}

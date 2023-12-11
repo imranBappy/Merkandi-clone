@@ -44,7 +44,7 @@ const Country = ({ handleEdit }) => {
 
   return (
     <div>
-      <h1 className="text-md font-semibold mb-2 block">All Categories</h1>
+      <h1 className="text-md font-semibold my-2 block">All Country</h1>
       <DataTable
         disabled={isLoading}
         columns={columns}

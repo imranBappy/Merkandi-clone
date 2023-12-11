@@ -10,9 +10,7 @@ export default function Countrypage() {
     shortName: "",
     code: "",
     currency: "",
-    currencyCode: "",
     currencySymbol: "",
-    phoneCode: "",
     flag: "",
   });
 
@@ -22,15 +20,14 @@ export default function Countrypage() {
     setCountry({
       _id: item._id,
       name: item.name,
-      description: item.description || "",
+      shortName: item.shortName,
+      code: item.code,
+      currency: item.currency,
+      currencySymbol: item.currencySymbol,
+      flag: item.flag._id,
     });
 
-    if (item.logo) {
-      setLogo([item.logo]);
-    }
-    if (item.banner) {
-      setBanner([item.banner]);
-    }
+    setFlag([item.flag]);
   };
 
   return (
@@ -42,7 +39,6 @@ export default function Countrypage() {
         <div className="w-full md:w-9/12 pl-0 md:pl-6">
           <div className="flex flex-col md:flex-row items-start">
             <div className="w-full md:w-3/6 pr-0 md:mr-8">
-              <h1 className="text-md font-semibold mb-2 block">Add Country</h1>
               <AddContry
                 countryState={[country, setCountry]}
                 flagState={[flag, setFlag]}
@@ -50,9 +46,6 @@ export default function Countrypage() {
             </div>
             <div className="w-full md:w-3/6">
               <div>
-                <h1 className="text-md font-semibold mb-2 block">
-                  All Country
-                </h1>
                 <Country handleEdit={handleEdit} />
               </div>
             </div>

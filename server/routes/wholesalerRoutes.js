@@ -10,10 +10,24 @@ const {
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const { userType } = require("../utils/userType");
 
-router.get("/", getWholesalers);
+router.get(
+  "/",
+  isAuthenticated([
+    userType.admin,
+    userType.premium,
+    userType.staff,
+    userType.standard,
+  ]),
+  getWholesalers
+);
 router.get(
   "/:id",
-  isAuthenticated([userType.admin, userType.premium]),
+  isAuthenticated([
+    userType.admin,
+    userType.premium,
+    userType.staff,
+    userType.standard,
+  ]),
   getWholesaler
 );
 router.post(

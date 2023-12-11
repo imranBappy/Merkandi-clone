@@ -1,17 +1,6 @@
 "use client";
 import AdminBer from "@/components/admin/AdminBer";
-import Button from "@/components/common/Button/Button";
-import ImageManager from "@/components/common/ImageManager";
-import TextInput from "@/components/common/Input/TextInput";
-import Textarea from "@/components/common/Input/Textarea";
 import Toaster from "@/components/common/Toaster/Toaster";
-import Brands from "@/components/seller/Brands";
-import Categories from "@/components/seller/Categories";
-import Country from "@/components/seller/Country";
-import DeliveryOptions from "@/components/seller/DeliveryOptions";
-import PaymentOptions from "@/components/seller/PaymentOptions";
-import Price from "@/components/seller/Price";
-import Tags from "@/components/seller/Tags";
 import {
   useGetProductQuery,
   usePostProductMutation,
@@ -47,7 +36,7 @@ const productInit = {
   stock: 0,
 };
 
-export default function Add() {
+export default function AddProduct() {
   const [error, setError] = useState({
     title: "",
     price: "",
@@ -55,10 +44,6 @@ export default function Add() {
   });
 
   const [product, setProduct] = useState(productInit);
-
-  console.log({
-    subcategory: product.subcategory,
-  });
 
   // query productId
 

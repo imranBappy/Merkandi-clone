@@ -322,7 +322,7 @@ function LeftUser() {
           </Link>
         </div>
 
-        <div className="bg-white border text-black mb-4 flex flex-col">
+        {/* <div className="bg-white border text-black mb-4 flex flex-col">
           <b className="text-sm p-2 border-b uppercase">Service</b>
 
           <Link
@@ -339,7 +339,7 @@ function LeftUser() {
             <LiaTachometerAltSolid fontSize={25} />
             Service add
           </Link>
-        </div>
+        </div> */}
 
         <div className="bg-white border text-black mb-4 flex flex-col">
           <b className="text-sm p-2 border-b uppercase">SHOPPING</b>

@@ -1,14 +1,9 @@
 "use client";
-import {
-  usePostBrandMutation,
-  useUpdateBrandMutation,
-} from "@/redux/features/brand/brandApi";
 import React, { useEffect, useState } from "react";
 import Toaster from "../common/Toaster/Toaster";
 import Button from "../common/Button/Button";
 import TextInput from "../common/Input/TextInput";
 import ImageManager from "../common/ImageManager";
-import { usePostCommentMutation } from "@/redux/features/comment/commentApi";
 import {
   usePostCountryMutation,
   useUpdateCountryMutation,
@@ -33,16 +28,8 @@ const validate = (country) => {
     error.currency = "Currency is required";
     isError = true;
   }
-  if (!country.currencyCode) {
-    error.currencyCode = "Currency code is required";
-    isError = true;
-  }
   if (!country.currencySymbol) {
     error.currencySymbol = "Currency symbol is required";
-    isError = true;
-  }
-  if (!country.phoneCode) {
-    error.phoneCode = "Phone code is required";
     isError = true;
   }
   return { isError, error };
@@ -54,28 +41,25 @@ const AddContry = ({ countryState, flagState }) => {
     shortName: "",
     code: "",
     currency: "",
-    currencyCode: "",
     currencySymbol: "",
-    phoneCode: "",
     flag: "",
   });
   const [country, setCountry] = countryState;
   const [flag, setFlag] = flagState;
 
-  const [addCountry, { data, isLoading, isError }] = usePostCountryMutation();
-  const [
-    updateCountry,
-    { data: updateData, isLoading: updateLogin, isError: updateError },
-  ] = useUpdateCountryMutation();
+  const [addCountry, { isSuccess, isLoading, isError }] =
+    usePostCountryMutation();
+  const [updateCountry, { isSuccess: updateSuccess, isError: updateError }] =
+    useUpdateCountryMutation();
 
   useEffect(() => {
     if (isError) {
       Toaster({
         type: "error",
-        message: error?.data || "Something went wrong",
+        message: "Something went wrong",
       });
     }
-    if (data?.success && !isLoading && !isError) {
+    if (isSuccess) {
       Toaster({
         type: "success",
         message: "Added successfully",
@@ -85,48 +69,36 @@ const AddContry = ({ countryState, flagState }) => {
         shortName: "",
         code: "",
         currency: "",
-        currencyCode: "",
         currencySymbol: "",
-        phoneCode: "",
         flag: "",
       });
       setFlag([]);
     }
-  }, [data, isLoading, isError, error?.data?.message, setCountry, setFlag]);
+  }, [isError, isSuccess, setCountry, setFlag]);
 
   useEffect(() => {
     if (updateError) {
       Toaster({
         type: "error",
-        message: updateError?.data || "Something went wrong",
+        message: "Something went wrong",
       });
     }
-    if (updateData?.success && !updateLogin && !updateError) {
+    if (updateSuccess) {
       setCountry({
         name: "",
         shortName: "",
         code: "",
         currency: "",
-        currencyCode: "",
         currencySymbol: "",
-        phoneCode: "",
         flag: "",
       });
       setFlag([]);
-
       Toaster({
         type: "success",
         message: "Updated successfully",
       });
     }
-  }, [
-    updateData,
-    updateError?.data,
-    updateLogin,
-    updateError,
-    setCountry,
-    setFlag,
-  ]);
+  }, [updateError, setCountry, setFlag, updateSuccess]);
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -152,6 +124,10 @@ const AddContry = ({ countryState, flagState }) => {
         },
       });
     }
+    console.log("added", {
+      ...country,
+      flag: flag[0],
+    });
     addCountry({
       ...country,
       flag: flag[0],
@@ -160,6 +136,8 @@ const AddContry = ({ countryState, flagState }) => {
 
   return (
     <div className="w-full mb-4 flex flex-col gap-2">
+      <h1 className="text-md font-semibold my-2 block">Add Country</h1>
+
       <TextInput
         name={"name"}
         value={country.name}
@@ -167,7 +145,6 @@ const AddContry = ({ countryState, flagState }) => {
         placeholder="Enter country name"
         error={error.name}
       />
-
       <TextInput
         name={"shortName"}
         value={country.shortName}
@@ -175,7 +152,6 @@ const AddContry = ({ countryState, flagState }) => {
         placeholder="Enter country short name"
         error={error.shortName}
       />
-
       <TextInput
         name={"code"}
         value={country.code}
@@ -183,7 +159,6 @@ const AddContry = ({ countryState, flagState }) => {
         placeholder="Enter country code"
         error={error.code}
       />
-
       <TextInput
         name={"currency"}
         value={country.currency}
@@ -192,25 +167,11 @@ const AddContry = ({ countryState, flagState }) => {
         error={error.currency}
       />
       <TextInput
-        name={"currencyCode"}
-        value={country.currencyCode}
-        onChange={handleChange}
-        placeholder="Enter country currency code"
-        error={error.currencyCode}
-      />
-      <TextInput
         name={"currencySymbol"}
         value={country.currencySymbol}
         onChange={handleChange}
         placeholder="Enter country currency symbol"
         error={error.currencySymbol}
-      />
-      <TextInput
-        name={"phoneCode"}
-        value={country.phoneCode}
-        onChange={handleChange}
-        placeholder="Enter country phone code"
-        error={error.phoneCode}
       />
       <ImageManager
         error={error.flag}

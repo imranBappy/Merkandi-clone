@@ -4,11 +4,14 @@ const connectDB = require("./config/db");
 const { errorHandle } = require("./middlewares/errorHandle");
 const setRoutes = require("./routes");
 const setMiddlewares = require("./middlewares");
-const app = express();
 const cors = require("cors");
+const http = require("http");
+const socketIo = require("socket.io");
 const Product = require("./models/Product");
-
 dotenv.config({ path: "./config/.env" });
+
+const app = express();
+// const server = http.createServer(app);
 
 // connect Database
 connectDB();
@@ -38,6 +41,22 @@ setRoutes(app);
 app.use(errorHandle);
 
 const PORT = 5000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
+});
+
+const io = socketIo(server, {
+  allowEIO3: true,
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowEIO3: true,
+  },
+});
+global.io = io;
+io.on("connection", (socket) => {
+  console.log("New client connected");
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
 });

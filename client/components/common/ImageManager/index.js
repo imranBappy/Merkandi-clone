@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UploadImages from "./UploadImages";
 import BrowseImages from "./BrowseImages";
 import Button from "../Button/Button";
 import { useDispatch } from "react-redux";
-import {
-  imageApi,
-  useSearchImagesQuery,
-} from "@/redux/features/files/imageApi";
+import { imageApi } from "@/redux/features/files/imageApi";
 
 const ImageManager = ({
   selectedState,
@@ -20,7 +17,7 @@ const ImageManager = ({
   const [tab, setTab] = useState(1);
   const [selected, setSelected] = selectedState;
   const [term, setTerm] = useState("");
-  const { data, refetch, isLoading } = useSearchImagesQuery();
+  // const { data, refetch, isLoading } = useSearchImagesQuery();
 
   const dispatch = useDispatch();
 
@@ -28,11 +25,53 @@ const ImageManager = ({
     setShowModal(!showModal);
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (term) {
+        dispatch(
+          imageApi.endpoints.searchImages.initiate(term, {
+            forceRefetch: true,
+          })
+        );
+      } else {
+        dispatch(
+          imageApi.endpoints.getMoreImages.initiate(
+            {
+              page: 1,
+              isNew: true,
+            },
+            {
+              forceRefetch: true,
+            }
+          )
+        );
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [term]);
+
   const handleSearch = (e) => {
     e.preventDefault();
-
-    // refetch(term);
-    // dispatch(imageApi.endpoints.searchImages.initiate(term));
+    if (term) {
+      dispatch(
+        imageApi.endpoints.searchImages.initiate(term, {
+          forceRefetch: true,
+        })
+      );
+    } else {
+      dispatch(
+        imageApi.endpoints.getMoreImages.initiate(
+          {
+            page: 1,
+            isNew: true,
+          },
+          {
+            // invalid previous data
+            forceRefetch: true,
+          }
+        )
+      );
+    }
   };
 
   return (
@@ -122,6 +161,7 @@ const ImageManager = ({
               </div>
             ) : (
               <BrowseImages
+                setError={setError}
                 multiple={multiple}
                 selectedState={[selected, setSelected]}
                 tab={tab}

@@ -24,17 +24,7 @@ const CountrySchema = new Schema(
       required: true,
       unique: true,
     },
-    currencyCode: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     currencySymbol: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    phoneCode: {
       type: String,
       required: true,
       unique: true,

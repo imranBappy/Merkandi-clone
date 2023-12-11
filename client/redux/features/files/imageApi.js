@@ -17,14 +17,21 @@ export const imageApi = apiSlice.injectEndpoints({
     }),
 
     getMoreImages: builder.query({
-      query: (page) => `${url}?page=${page || 1}}`,
-      async onQueryStarted(page, { dispatch, queryFulfilled }) {
+      query: ({ page = 1, isNew = false } = {}) => `${url}?page=${page || 1}}`,
+      async onQueryStarted({ page, isNew }, { dispatch, queryFulfilled }) {
         try {
           const image = await queryFulfilled;
-          if (image?.data?.data.length > 0) {
+
+          if (image?.data?.images.length > 0) {
             dispatch(
               apiSlice.util.updateQueryData("getImages", 1, (draft) => {
-                draft.data.push(...image?.data?.data);
+                if (isNew) {
+                  draft.images = image?.data?.images;
+                  return;
+                }
+                draft.images.push(...image?.data?.images);
+                draft.total = image?.data?.total;
+                draft.page = image?.data?.page;
               })
             );
           }
@@ -37,17 +44,19 @@ export const imageApi = apiSlice.injectEndpoints({
     searchImages: builder.query({
       query: (term) => `${url}/search?term=${term || ""}}`,
       providesTags: ["Image"],
-
       async onQueryStarted(term, { dispatch, queryFulfilled }) {
         try {
           const image = await queryFulfilled;
-          if (image?.data?.data.length > 0) {
-            dispatch(
-              apiSlice.util.updateQueryData("searchImages", term, (draft) => {
-                draft.data = image?.data?.data;
-              })
-            );
-          }
+
+          // if (image?.data?.images.length > 0) {
+          dispatch(
+            apiSlice.util.updateQueryData("getImages", 1, (draft) => {
+              draft.images = image?.data?.images;
+              draft.total = image?.data?.total;
+              draft.page = image?.data?.page;
+            })
+          );
+          // }
         } catch (error) {
           console.log({ error });
         }

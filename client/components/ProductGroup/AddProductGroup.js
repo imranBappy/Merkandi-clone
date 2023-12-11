@@ -13,7 +13,7 @@ const AddProductGroup = ({ productGroupState }) => {
   const [error, setError] = useState({ name: "" });
   const [productGroup, setProductGroup] = productGroupState;
 
-  const [addProductGroup, { data, isLoading, isError }] =
+  const [addProductGroup, { data, isLoading, isError, isSuccess: addSuccess }] =
     usePostProductGroupMutation();
   const [
     updateBrand,
@@ -24,10 +24,10 @@ const AddProductGroup = ({ productGroupState }) => {
     if (isError) {
       Toaster({
         type: "error",
-        message: error?.data || "Something went wrong",
+        message: "Something went wrong",
       });
     }
-    if (data?.success && !isLoading && !isError) {
+    if (addSuccess) {
       Toaster({
         type: "success",
         message: "Added successfully",
@@ -37,7 +37,7 @@ const AddProductGroup = ({ productGroupState }) => {
         description: "",
       });
     }
-  }, [data, isLoading, isError, error?.data, setProductGroup]);
+  }, [isError, addSuccess, setProductGroup]);
 
   useEffect(() => {
     if (updateIsError) {

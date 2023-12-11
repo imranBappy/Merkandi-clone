@@ -28,7 +28,6 @@ exports.signupController = async (req, res, next) => {
   try {
     let { name, email, password, role, surname, country, phone, isCompany } =
       req.body;
-
     const user = await Auth.findOne({ email: email });
     const otp = await OTP.findOne({ email: email });
     const newOTP = await generateOTP();

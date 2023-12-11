@@ -1,33 +1,35 @@
 "use client";
 import LeftUser from "@/components/LeftUser";
+import Blank from "@/components/inbox/Blank";
+import Sidebar from "@/components/inbox/Sidebar";
 import Messenger from "@/components/seller/Messenger";
-import { useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import { useEffect, useState } from "react";
+import io from "socket.io-client";
 
 const users = [
   {
     id: 1,
-    name: 'HeRa',
-    avatar: '/users.jpg',
-    status: 'Online',
+    name: "HeRa",
+    avatar: "/users.jpg",
+    status: "Online",
     address: "503 Broadway",
     city: "New York",
     country: "USA",
     position: "Warehouse Manager",
     phone: "+1 (646) 123-1234",
-    email: "glyon@instock.com"
+    email: "glyon@instock.com",
   },
   {
     id: 2,
-    name: 'HeRa Khan',
-    avatar: '/user.jpg',
-    status: 'Offline',
+    name: "HeRa Khan",
+    avatar: "/user.jpg",
+    status: "Offline",
     address: "503 Broadway",
     city: "New York",
     country: "USA",
     position: "Warehouse Manager",
     phone: "+1 (646) 123-1234",
-    email: "glyon@instock.com"
+    email: "glyon@instock.com",
   },
 ];
 
@@ -35,9 +37,8 @@ export default function Home() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3001');
+    const newSocket = io("http://localhost:5000");
     setSocket(newSocket);
-
     return () => newSocket.close();
   }, []);
   return (
@@ -47,7 +48,14 @@ export default function Home() {
           <LeftUser />
         </div>
         <div className="w-full md:w-9/12 pl-0 md:pl-6">
-          <Messenger users={users} socket={socket} />
+          <div className="min-w-full border rounded flex lg:grid lg:grid-cols-3">
+            <Sidebar />
+            <div className="w-full lg:col-span-2 lg:block">
+              <div className="w-full grid conversation-row-grid">
+                <Blank />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

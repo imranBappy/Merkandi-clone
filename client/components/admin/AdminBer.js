@@ -92,7 +92,7 @@ function AdminBer() {
             { title: "Lavel", link: "/admin/lavel" },
             { title: "Unit", link: "/admin/unit" },
             { title: "Product Group", link: "/admin/product-group" },
-            { title: "Country", link: "/admin/contry" },
+            { title: "Country", link: "/admin/country" },
           ]}
         />
         <AdminLink

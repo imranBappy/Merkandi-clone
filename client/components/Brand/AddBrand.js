@@ -16,20 +16,26 @@ const AddBrand = ({ brandState, logoState, bannerState }) => {
   const [logo, setLogo] = logoState;
   const [banner, setBanner] = bannerState;
 
-  const [addBrand, { data, isLoading, isError }] = usePostBrandMutation();
+  const [addBrand, { data, isLoading, isError, isSuccess }] =
+    usePostBrandMutation();
   const [
     updateBrand,
-    { data: updateData, isLoading: updateLogin, isError: updateError },
+    {
+      data: updateData,
+      isLoading: updateLogin,
+      isError: updateError,
+      isSuccess: updateSuccess,
+    },
   ] = useUpdateBrandMutation();
 
   useEffect(() => {
     if (isError) {
       Toaster({
         type: "error",
-        message: error?.data || "Something went wrong",
+        message: "Something went wrong",
       });
     }
-    if (data?.success && !isLoading && !isError) {
+    if (isSuccess) {
       Toaster({
         type: "success",
         message: "Added successfully",
@@ -44,16 +50,15 @@ const AddBrand = ({ brandState, logoState, bannerState }) => {
       setBanner([]);
     }
     //add setBrand, error, setLogo, setBanner
-  }, [data, isLoading, isError, setBrand, setLogo, setBanner, error]);
-
+  }, [isError, setBrand, setLogo, setBanner, isSuccess]);
   useEffect(() => {
     if (updateError) {
       Toaster({
         type: "error",
-        message: updateError?.data || "Something went wrong",
+        message: "Something went wrong",
       });
     }
-    if (updateData?.success && !updateLogin && !updateError) {
+    if (updateSuccess) {
       Toaster({
         type: "success",
         message: "Updated successfully",
@@ -68,7 +73,7 @@ const AddBrand = ({ brandState, logoState, bannerState }) => {
       setBanner([]);
     }
     //add setBrand, error, setLogo, setBanner
-  }, [updateData, updateLogin, updateError, setBrand, setLogo, setBanner]);
+  }, [updateError, setBrand, setLogo, setBanner, updateSuccess]);
 
   const handleChange = (e) => {
     const { value } = e.target;

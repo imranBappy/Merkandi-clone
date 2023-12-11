@@ -8,7 +8,6 @@ const isAuthenticated =
       const decode = jwt.verify(authorization, process.env.JWT_SECRET);
 
       if (!decode) return next("User Unauthorized");
-
       if (!role.includes(decode?.data?.role)) {
         return next("User Unauthorized");
       }

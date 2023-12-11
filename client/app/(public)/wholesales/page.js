@@ -4,17 +4,20 @@ import Seller from "@/components/Seller";
 import { useGetStoresQuery } from "@/redux/features/store/storeApi";
 import Image from "next/image";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
-export default function Home() {
+export default function WholesalesPagee() {
   const { data } = useGetStoresQuery({
     Default: true,
   });
 
+  const { isAuthintication } = useSelector((state) => state.auth);
+  console.log();
+
   return (
     <>
-      {data?.stores?.map((store) => (
-        <Seller key={store._id} store={store} />
-      ))}
+      {isAuthintication &&
+        data?.stores?.map((store) => <Seller key={store._id} store={store} />)}
       <div className="z-0 bg-[url('/images/bg-unlock.jpg')] bg-no-repeat bg-cover h-[400px] pt-8 relative flex flex-col items-center">
         <div className="bg-black opacity-70 absolute inset-0 z-0"></div>
         <h1 className="relative text-center text-4xl leading-10 font-extrabold text-white max-w-[600px] z-10">

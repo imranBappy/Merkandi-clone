@@ -4,13 +4,14 @@ import {
   useDeleteImageMutation,
   useGetImagesQuery,
 } from "@/redux/features/files/imageApi";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ImageCard from "./ImageCard";
 import Loading from "../Loader/Loading";
 import { useDispatch } from "react-redux";
 import Toaster from "../Toaster/Toaster";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-const BrowseImages = ({ tab, selectedState, multiple }) => {
+const BrowseImages = ({ tab, selectedState, multiple, setError }) => {
   const [selected, setSelected] = selectedState;
 
   const [page, setPage] = useState(1);
@@ -18,19 +19,12 @@ const BrowseImages = ({ tab, selectedState, multiple }) => {
   const {
     data: imageDate,
     isLoading: imageLoading,
-    error,
     refetch,
-  } = useGetImagesQuery(1);
+  } = useGetImagesQuery(page);
 
   const [deleteImage, { data: deleteData, isLoading: deleteLoading }] =
     useDeleteImageMutation();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (page > 1) {
-      dispatch(imageApi.endpoints.getMoreImages.initiate(page));
-    }
-  }, [page, dispatch]);
 
   const handleDelete = async (img) => {
     // console.log("delete", img);
@@ -51,7 +45,6 @@ const BrowseImages = ({ tab, selectedState, multiple }) => {
       //   })
       //   .then(async (res) => {
       //     console.log(res);
-
       //   });
       await deleteImage(img._id);
       Toaster({
@@ -75,46 +68,75 @@ const BrowseImages = ({ tab, selectedState, multiple }) => {
       setSelected((pre) => [...pre, item]);
       if (isSelected(item)) {
         setSelected((pre) => pre.filter((img) => img._id !== item._id));
+      } else {
+        setError();
       }
     } else {
       if (isSelected(item)) {
         setSelected([]);
-      } else setSelected([item]);
+      } else {
+        setSelected([item]);
+        setError();
+      }
     }
   };
 
-  const handleNext = () => {
-    console.log("next");
-    setPage((pre) => pre + 1);
-  };
-
-  const handleScroll = (e) => {
-    const bottom =
-      e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-    if (bottom) {
-      handleNext();
-    }
+  const handleScroll = (x) => {
+    dispatch(
+      imageApi.endpoints.getMoreImages.initiate({
+        page: imageDate?.page + 1,
+      })
+    );
   };
 
   return (
     <div
-      onScroll={handleScroll}
+      id="scrollableDiv"
       className=" w-full p-5  max-h-[calc(100vh-200px)] overflow-y-auto   bg-white  rounded-b-md relative "
     >
       {imageLoading && <Loading />}
-      {!imageLoading && (
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 ">
-          {imageDate?.data?.map((item, i) => (
-            <ImageCard
-              key={item._id}
-              src={item.url}
-              onDelete={() => handleDelete(item)}
-              onSelected={() => handleSelected(item)}
-              selected={isSelected(item)}
-            />
-          ))}
-        </div>
-      )}
+      <InfiniteScroll
+        dataLength={imageDate?.total || 0}
+        next={handleScroll}
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-around",
+          gap: "1rem",
+          padding: "1rem 0",
+        }}
+        hasMore={imageDate?.images?.length !== imageDate?.total}
+        loader={
+          <div className="flex items-center justify-center w-full">
+            <Loading />
+          </div>
+        }
+        scrollableTarget="scrollableDiv"
+        endMessage={
+          <p
+            style={{
+              textAlign: "center",
+              width: "100%",
+              padding: "10px 0",
+            }}
+          >
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+        refreshFunction={refetch}
+        pullDownToRefresh={refetch}
+        pullDownToRefreshThreshold={50}
+      >
+        {imageDate?.images?.map((item, i) => (
+          <ImageCard
+            key={item._id}
+            src={item.url}
+            onDelete={() => handleDelete(item)}
+            onSelected={() => handleSelected(item)}
+            selected={isSelected(item)}
+          />
+        ))}
+      </InfiniteScroll>
     </div>
   );
 };

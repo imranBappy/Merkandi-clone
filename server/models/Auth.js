@@ -55,6 +55,10 @@ const authScheme = Schema(
         ref: "product",
       },
     ],
+    isOnline: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
