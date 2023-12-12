@@ -26,15 +26,14 @@ export default function ChatItems() {
   } = useSelector((state) => state.auth) || {};
   const dispatch = useDispatch();
   useEffect(() => {
-    // if (page > 1) {
-    //   console.log("Page : ", page);
-    //   dispatch(
-    //     conversationsApi.endpoints.getMoreConversations.initiate({
-    //       email,
-    //       page,
-    //     })
-    //   );
-    // }
+    if (page > 1) {
+      dispatch(
+        conversationsApi.endpoints.getMoreConversations.initiate({
+          limit: 20,
+          page,
+        })
+      );
+    }
   }, [page, dispatch]);
   const fetchMoreData = () => {
     setPage(page + 1);

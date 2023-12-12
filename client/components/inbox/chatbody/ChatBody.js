@@ -11,13 +11,19 @@ import Messages from "./Messages";
 import Options from "./Options";
 
 export default function ChatBody({ conversactionId }) {
+  const limit = 20;
+  const page = 1;
+
   const {
     data: { messages = [], total } = {},
-    data: x,
     isLoading,
     isError,
     error,
-  } = useGetMessagesQuery(conversactionId);
+  } = useGetMessagesQuery({
+    conversactionId,
+    limit,
+    page,
+  });
 
   const { data = {} } = useSelector((state) => state.auth);
 
@@ -39,8 +45,13 @@ export default function ChatBody({ conversactionId }) {
         <ChatHead
           avatar={gravatarUrl(partner?.email, { size: 80 })}
           name={partner?.name}
+          _id={partner?._id}
         />
-        <Messages totalCount={total} messages={messages} />
+        <Messages
+          totalCount={total}
+          messages={messages}
+          conversactionId={conversactionId}
+        />
         <Options info={messages[0]} />
       </>
     );

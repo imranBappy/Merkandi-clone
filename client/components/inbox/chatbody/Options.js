@@ -14,10 +14,6 @@ export default function Options({ info }) {
   const [sendMessage, { isSuccess, isError, error }] = useAddMessageMutation();
 
   useEffect(() => {
-    if (isSuccess) setMessage("");
-  }, [isSuccess]);
-
-  useEffect(() => {
     if (isError) {
       Toaster({
         type: "error",
@@ -36,6 +32,7 @@ export default function Options({ info }) {
       message,
     };
     sendMessage(newMessage);
+    setMessage("");
 
     // editConversation({
     //   id: info.conversationId,

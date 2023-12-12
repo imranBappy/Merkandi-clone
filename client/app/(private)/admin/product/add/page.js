@@ -36,7 +36,7 @@ const productInit = {
   stock: 0,
 };
 
-export default function AddProduct() {
+export default function AddProductPage() {
   const [error, setError] = useState({
     title: "",
     price: "",

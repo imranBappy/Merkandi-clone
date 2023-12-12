@@ -63,7 +63,7 @@ exports.getConversation = async (req, res, next) => {
   try {
     const { page, limit } = req.query;
     const currentPage = parseInt(page) || 1;
-    const perPage = parseInt(limit) || 10;
+    const perPage = parseInt(limit) || 20;
 
     const conversations = await Conversation.find({
       $or: [{ createdBy: req.user }, { participant: req.user }],
@@ -75,7 +75,7 @@ exports.getConversation = async (req, res, next) => {
       .limit(perPage);
 
     const totalConversation = await Conversation.countDocuments({
-      or: [{ createdBy: req.user }, { participant: req.user }],
+      $or: [{ createdBy: req.user }, { participant: req.user }],
     });
 
     res.json({
@@ -140,7 +140,7 @@ exports.getMessages = async (req, res, next) => {
     });
 
     res.json({
-      messages: messages.reverse(),
+      messages: messages,
       total: totalCount,
     });
   } catch (error) {

@@ -5,7 +5,8 @@ import { io } from "socket.io-client";
 export const messagesApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMessages: builder.query({
-      query: (id) => `/message/all/${id}`,
+      query: ({ conversactionId, limit = 20, page = 1 }) =>
+        `/message/all/${conversactionId}?limit=${limit}&page=${page}`,
       async onCacheEntryAdded(
         arg,
         { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState }
@@ -25,14 +26,12 @@ export const messagesApi = apiSlice.injectEndpoints({
           const { data: authData } = getState().auth;
 
           socket.on("newMessage", (data) => {
-            console.log(data);
             const isMyMessage =
               data.sender.email === authData.email ||
               data.receiver.email === authData.email;
             if (isMyMessage) {
               updateCachedData((draft) => {
-                console.log(JSON.parse(JSON.stringify(draft)));
-                draft.messages?.push(data);
+                draft.messages?.unshift(data);
               });
             }
           });
@@ -42,16 +41,24 @@ export const messagesApi = apiSlice.injectEndpoints({
     }),
     // for infinite scroll
     getMoreMessages: builder.query({
-      query: ({ page, id }) =>
-        `/messages?conversationId=${id}&_sort=timestamp&_order=desc&_page=${page}&_limit=${process.env.REACT_APP_MESSAGES_PER_PAGE}`,
-      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+      query: ({ page, conversactionId, limit = 20 }) =>
+        `/message/all/${conversactionId}?page=${page}&limit=${limit}`,
+      async onQueryStarted(
+        { conversactionId, limit, page },
+        { dispatch, queryFulfilled }
+      ) {
         try {
-          const messages = await queryFulfilled;
-          if (messages?.data?.length > 0) {
+          const { data } = await queryFulfilled;
+          let { messages } = data;
+          if (messages?.length > 0) {
             dispatch(
-              apiSlice.util.updateQueryData("getMessages", id, (draft) => {
-                draft.data.push(...messages?.data);
-              })
+              apiSlice.util.updateQueryData(
+                "getMessages",
+                { conversactionId, limit: 20, page: 1 },
+                (draft) => {
+                  draft.messages.push(...messages);
+                }
+              )
             );
           }
         } catch (error) {}

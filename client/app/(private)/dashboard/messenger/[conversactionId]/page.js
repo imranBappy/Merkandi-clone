@@ -3,7 +3,6 @@ import LeftUser from "@/components/LeftUser";
 import Blank from "@/components/inbox/Blank";
 import Sidebar from "@/components/inbox/Sidebar";
 import ChatBody from "@/components/inbox/chatbody/ChatBody";
-import { useGetMessagesQuery } from "@/redux/features/messages/messagesApi";
 import React from "react";
 
 const page = ({ params }) => {

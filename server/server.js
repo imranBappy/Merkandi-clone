@@ -46,11 +46,11 @@ const server = app.listen(PORT, () => {
 });
 
 const io = socketIo(server, {
-  allowEIO3: true,
+  // allowEIO3: true,
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
-    allowEIO3: true,
+    // allowEIO3: true,
   },
 });
 global.io = io;
