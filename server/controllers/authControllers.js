@@ -94,7 +94,8 @@ exports.singinPostController = async (req, res, next) => {
           role: user.role,
         },
       },
-      process.env.JWT_SECRET,
+      // process.env.JWT_SECRET,
+      "F675EF787EC393B121B13742CC32",
       {
         expiresIn: "7d", //1m "7d"
       }
@@ -113,6 +114,7 @@ exports.singinPostController = async (req, res, next) => {
       accessToken: token,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -168,7 +170,8 @@ exports.verifyAccountController = async (req, res, next) => {
       {
         data: { _id: user._id, name: user.name, url: user.email },
       },
-      process.env.JWT_SECRET,
+      // process.env.JWT_SECRET,
+      "F675EF787EC393B121B13742CC32",
       { expiresIn: "7d" }
     );
 
