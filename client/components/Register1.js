@@ -62,7 +62,7 @@ const Register1 = () => {
                   These are net prices, which are subject to VAT rate in line
                   with EU directive.
                 </p>
-                <Link href="#">
+                <Link href="/register/create?plan=premium">
                   <p className="bg-yellow-500 text-white w-full py-2 px-4 mt-2 block text-center rounded">
                     Register
                   </p>
@@ -91,7 +91,7 @@ const Register1 = () => {
                 These are net prices, which are subject to VAT rate in line with
                 EU directive.
               </p>
-              <Link href="#">
+              <Link href="/register/create?plan=standard">
                 <p className="border border-yellow-500 text-yellow-500 w-full py-2 px-4 mt-2 block text-center rounded">
                   Register
                 </p>
@@ -390,7 +390,7 @@ const Register1 = () => {
                 These are net prices, which are subject to VAT rate in line with
                 EU directive.
               </p>
-              <Link href="#">
+              <Link href="/register/create?plan=standard">
                 <p className="bg-yellow-500 text-white w-full py-2 px-4 mt-2 block text-center rounded">
                   Register
                 </p>
@@ -417,7 +417,7 @@ const Register1 = () => {
                 These are net prices, which are subject to VAT rate in line with
                 EU directive.
               </p>
-              <Link href="#">
+              <Link href="/register/create?plan=standard">
                 <p className="border border-yellow-500 text-yellow-500 w-full py-2 px-4 mt-2 block text-center rounded">
                   Register
                 </p>

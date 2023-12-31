@@ -1,6 +1,7 @@
 // components/Dropdown.js
-import Link from 'next/link';
-import { useState } from 'react';
+import Link from "next/link";
+import { useState } from "react";
+import { LanguageSwitcher } from "./lang/LangSwitcher";
 
 const Dropdown = ({ buttonText, options, position = "right" }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,8 +16,19 @@ const Dropdown = ({ buttonText, options, position = "right" }) => {
         onClick={() => setIsOpen(!isOpen)}
       >
         {buttonText}
-        <svg className="h-4 w-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+        <svg
+          className="h-4 w-4 ml-2"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeLinejoin="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
@@ -27,7 +39,8 @@ const Dropdown = ({ buttonText, options, position = "right" }) => {
           aria-orientation="vertical"
         >
           <div className="py-0">
-            {options.map((option, index) => (
+            <LanguageSwitcher />
+            {/* {options.map((option, index) => (
               <Link
                 key={index}
                 href={option.url}
@@ -36,7 +49,7 @@ const Dropdown = ({ buttonText, options, position = "right" }) => {
               >
                 {option.label}
               </Link>
-            ))}
+            ))} */}
           </div>
         </div>
       )}

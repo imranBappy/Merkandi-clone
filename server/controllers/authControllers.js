@@ -1,9 +1,9 @@
 const Auth = require("../models/Auth");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
-const UserProfile = require("../models/UserProfile");
 const OTP = require("../models/OTP");
 const { generateOTP } = require("../utils/generateOTP");
+const Store = require("../models/Store");
 
 exports.authGetController = async (req, res, next) => {
   try {
@@ -26,39 +26,52 @@ exports.authGetController = async (req, res, next) => {
 };
 exports.signupController = async (req, res, next) => {
   try {
-    let { name, email, password, role, surname, country, phone, isCompany } =
-      req.body;
+    let {
+      name,
+      email,
+      password,
+      role,
+      country,
+      phone,
+      isCompany = false,
+      company,
+    } = req.body;
     const user = await Auth.findOne({ email: email });
-    const otp = await OTP.findOne({ email: email });
-    const newOTP = await generateOTP();
     if (user) {
-      if (otp) {
-        return res.json({
-          message: "Check you email to activate your account!",
-        });
+      if (user.isVerify) {
+        return next("User Already Exist!");
       }
-      if (!user.isVerify) {
-        await OTP({ email: email, otp: newOTP }).save();
-        return res.json({
-          message: "Check you email to activate your account!",
-        });
-      }
-
-      return res.status(223).json({ message: "User Already Exist!" });
+      await Auth.deleteOne({ _id: user._id });
     }
 
-    if (password.length < 6) return res.json({ message: "Min length 6" });
+    if (password.length < 6) return next("Min length 6");
     password = await bcrypt.hash(password, 10);
 
-    const newUser = new Auth({ name, email, password, role });
-
-    await newUser.save();
-    if (isCompany) await UserProfile.create({ surname, country, phone });
-    await OTP({ email: email, otp: newOTP }).save();
-
-    res.json({
-      message: "Check you email to activate your account!",
+    const newUser = new Auth({
+      name,
+      email,
+      password,
+      role,
+      isVerify: false,
+      country,
+      phone,
     });
+
+    if (isCompany) {
+      const newCompanyData = {
+        ...company,
+        name: name,
+        country: country,
+        user: newUser._id,
+        phone: phone,
+        default: true,
+      };
+      await Store.create(newCompanyData);
+    }
+
+    const newCreatedUser = await newUser.save();
+
+    res.json(newCreatedUser);
   } catch (error) {
     next(error);
   }
@@ -68,18 +81,12 @@ exports.singinPostController = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await Auth.findOne({ email: email });
     if (!user) {
-      return res.status(404).json({
-        isAuthintication: false,
-        message: "Account is not exit",
-      });
+      return next("Account is not exit");
     }
 
     // check verify account
     if (!user.isVerify) {
-      return res.status(404).json({
-        isAuthintication: false,
-        message: "Account is not exit",
-      });
+      return next("Account is not verified!");
     }
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
@@ -94,8 +101,7 @@ exports.singinPostController = async (req, res, next) => {
           role: user.role,
         },
       },
-      // process.env.JWT_SECRET,
-      "F675EF787EC393B121B13742CC32",
+      process.env.JWT_SECRET,
       {
         expiresIn: "7d", //1m "7d"
       }
@@ -152,16 +158,16 @@ exports.verifyAccountController = async (req, res, next) => {
     const diff = now.getTime() - otpTime.getTime();
     const diffMins = Math.round(diff / (1000 * 60));
     if (diffMins > 5) {
-      return res.status(404).json({ message: "OTP is expired!" });
+      return next("OTP is expired!");
     }
     // if otp is valid then create a user
 
     const user = await Auth.findOne({ email: findOtp.email });
     if (!user) {
-      return res.status(404).json({ message: "User not found!" });
+      return next("User not found!");
     }
     if (user?.isVerify) {
-      return res.status(404).json({ message: "User is already Verified!" });
+      return next("User is already Verified!");
     }
     user.isVerify = true;
     await user.save();
@@ -170,8 +176,7 @@ exports.verifyAccountController = async (req, res, next) => {
       {
         data: { _id: user._id, name: user.name, url: user.email },
       },
-      // process.env.JWT_SECRET,
-      "F675EF787EC393B121B13742CC32",
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -185,10 +190,10 @@ exports.forgotPasswordController = async (req, res, next) => {
     const { email } = req.body;
     const user = await Auth.findOne({ email: email });
     if (!user) {
-      return res.status(404).json({ message: "User not found!" });
+      return next("User not found!");
     }
     if (!user.isVerify) {
-      return res.status(404).json({ message: "User not verified!" });
+      return next("User not verified!");
     }
 
     // check if otp is expired or not
@@ -199,7 +204,7 @@ exports.forgotPasswordController = async (req, res, next) => {
       const diff = now.getTime() - otpTime.getTime();
       const diffMins = Math.round(diff / (1000 * 60));
       if (diffMins < 5) {
-        return res.status(404).json({ message: "OTP is already sent!" });
+        return next("OTP is already sent!");
       }
     }
 
@@ -225,10 +230,10 @@ exports.resetController = async (req, res, next) => {
     const diff = now.getTime() - otpTime.getTime();
     const diffMins = Math.round(diff / (1000 * 60));
     if (diffMins > 5) {
-      return res.status(404).json({ message: "OTP is expired!" });
+      return next("OTP is expired!");
     }
     // if otp is valid then create a user
-    if (password.length < 6) return res.json({ message: "Min length 6" });
+    if (password.length < 6) return next("Min length 6");
     password = await bcrypt.hash(password, 10);
 
     await Auth.updateOne({ email: findOtp.email }, { password: password });

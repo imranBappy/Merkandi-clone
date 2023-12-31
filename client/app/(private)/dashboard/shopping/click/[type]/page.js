@@ -4,7 +4,6 @@ import ClickTable from "@/components/Click/ClickTable";
 import LeftUser from "@/components/LeftUser";
 
 const ClickPage = ({ params }) => {
-  console.log(params);
   return (
     <div className="max-w-screen-xl mx-auto py-4 md:px-8">
       <div className="flex flex-col md:flex-row items-start">

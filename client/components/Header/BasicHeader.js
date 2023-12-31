@@ -5,10 +5,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import useLogout from "@/hooks/useLogout";
 import NevBer from "../NevBer";
+import useAuthCheck from "@/hooks/useAuthCheck";
 
 const BasicHeader = () => {
   const [showNev2, setShowNev2] = useState(false);
 
+  useAuthCheck();
   const auth = useSelector((state) => state.auth);
   const logout = useLogout();
 

@@ -3,7 +3,7 @@ const Store = require("../models/Store");
 
 exports.getStores = async (req, res, next) => {
   try {
-    const { page, limit, user, active, Default } = req.query;
+    const { page, limit, user, active, Default, type } = req.query;
     const currentPage = parseInt(page) || 1;
     const perPage = parseInt(limit) || 10;
 
@@ -11,6 +11,7 @@ exports.getStores = async (req, res, next) => {
       ...(user && { user: user }),
       ...(active && { active: active }),
       ...(Default && { default: !!Default }),
+      ...(type && { type: type }),
     };
     const stores = await Store.find(query)
       .populate({
@@ -33,9 +34,7 @@ exports.getStores = async (req, res, next) => {
 };
 exports.getStore = async (req, res, next) => {
   try {
-    const store = await Store.findOne({
-      country: req.params.country,
-    });
+    const store = await Store.findOne({ _id: req.params.id });
     if (!store) {
       return next("Store not found");
     }

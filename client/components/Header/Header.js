@@ -9,6 +9,7 @@ import NevBer from "../NevBer";
 import { useSelector } from "react-redux";
 import useLogout from "@/hooks/useLogout";
 import useAuthCheck from "@/hooks/useAuthCheck";
+import Script from "next/script";
 
 const Header = () => {
   const [showNev2, setShowNev2] = useState(false);
@@ -20,8 +21,22 @@ const Header = () => {
   const url =
     auth?.data?.role === ("ADMIN" || "STAFF") ? "/admin" : "/dashboard";
 
+  const { order } = useSelector((state) => state.order);
+
   return (
     <>
+      <Script
+        src="/assets/scripts/lang-config.js"
+        strategy="beforeInteractive"
+      />
+      <Script
+        src="/assets/scripts/translation.js"
+        strategy="beforeInteractive"
+      />
+      <Script
+        src="//translate.google.com/translate_a/element.js?cb=TranslateInit"
+        strategy="afterInteractive"
+      />
       {/* ---Admin---------- */}
 
       <div className="hidden md:block">
@@ -180,7 +195,7 @@ const Header = () => {
                   </div>
                 </div>
 
-                <Link href="/wishlist" className="flex items-center relative">
+                <Link href="/order" className="flex items-center relative">
                   {" "}
                   <div className="rounded-full border border-gray-300 w-12 h-12 flex items-center justify-center mr-4">
                     <svg
@@ -201,7 +216,7 @@ const Header = () => {
                     </svg>
                   </div>
                   <span className="p-2 bg-red-500 absolute right-0 top-0 leading-[6px] text-white">
-                    0
+                    {/* {total} */ order.length}
                   </span>
                 </Link>
               </div>

@@ -1,4 +1,9 @@
 const { Schema, model } = require("mongoose");
+const Category = require("./Category");
+const Subcategory = require("./Subcategories");
+const Brand = require("./Brand");
+const sendProductToAlgolia = require("../utils/sendProductToAlgolia");
+const Image = require("./Image");
 
 const productSchema = Schema(
   {
@@ -130,6 +135,28 @@ productSchema.index(
     },
   }
 );
+productSchema.post("save", async function () {
+  const product = this;
+  const category = await Category.findById(product.category, {
+    select: "name description",
+  });
+  const subcategories = await Subcategory.findById(product.subcategory, {
+    select: "name description",
+  });
+  const brand = await Brand.findById(product.brand, {
+    select: "name description",
+  });
+  const image = await Image.findById(product.image);
+  const updateProduct = {
+    ...product._doc,
+    category,
+    ...(subcategories && { subcategories }),
+    brand,
+    image,
+  };
+
+  await sendProductToAlgolia(updateProduct);
+});
 
 const Product = model("product", productSchema);
 module.exports = Product;

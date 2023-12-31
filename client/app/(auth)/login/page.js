@@ -70,7 +70,6 @@ export default function Login() {
     }
     return value && error;
   };
-
   useEffect(() => {
     if (data || isError) {
       if (isError)
@@ -83,7 +82,7 @@ export default function Login() {
           type: "success",
           message: data?.message || "Login successfully",
         });
-        router.back();
+        router.push("/");
       }
     }
     //add isSuccess

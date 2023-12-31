@@ -8,6 +8,7 @@ const cors = require("cors");
 const http = require("http");
 const socketIo = require("socket.io");
 const Product = require("./models/Product");
+const sendProductToAlgolia = require("./utils/sendProductToAlgolia");
 dotenv.config({ path: "./config/.env" });
 
 const app = express();
@@ -24,14 +25,24 @@ setMiddlewares(app);
 
 app.get("/test", async (req, res) => {
   try {
-    const products = await Product.find({
-      // label: { $in: ["new", "hot"] },
-      // multiple brands
-      brand: { $in: ["65649e416cd9998fd5932c4a", "656b34c4b79b5d8a7f5465fa"] },
-    });
-    console.log(products.length);
-    res.status(200).json(products);
-  } catch (error) {}
+    const product = {
+      _id: "1012",
+      name: "Bike",
+      description: "Suzuki Black Bike",
+      price: 150,
+      brand: "Suzuki",
+      category: "Bike",
+    };
+
+    const x = await sendProductToAlgolia(product);
+
+    console.log({ x });
+
+    res.send("Ok");
+  } catch (error) {
+    console.log(error);
+    res.send("Error");
+  }
 });
 
 // all routes set here

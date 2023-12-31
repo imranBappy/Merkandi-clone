@@ -56,6 +56,10 @@ const storeModel = new Schema(
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      default: "billing ",
+    },
   },
   {
     timestamps: true,

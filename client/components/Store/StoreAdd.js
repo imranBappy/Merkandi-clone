@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Switch from "../common/Input/Switch";
 import { useSelector } from "react-redux";
 import TextInput from "../common/Input/TextInput";
@@ -36,6 +36,7 @@ const errorValidation = (store) => {
     isError = true;
   }
   if (!store.country) {
+    console.log("country", store);
     errors.country = "Country is required";
     isError = true;
   }
@@ -53,7 +54,7 @@ const errorValidation = (store) => {
   };
 };
 
-const StoreAdd = ({ country, countries }) => {
+const StoreAdd = ({ storeData, countries }) => {
   const [store, setStore] = useState({
     company: "",
     name: "",
@@ -90,9 +91,9 @@ const StoreAdd = ({ country, countries }) => {
     },
   ] = usePostStoreMutation();
 
-  const { data: storeData } = useGetStoreQuery(country._id, {
-    skip: !country._id,
-  });
+  // const { data: storeData } = useGetStoreQuery(str._id, {
+  //   skip: !str._id,
+  // });
 
   const [
     updateStore,
@@ -146,7 +147,7 @@ const StoreAdd = ({ country, countries }) => {
   useEffect(() => {
     setStore((store) => ({
       ...store,
-      country: country._id,
+      country: storeData?._id,
     }));
     if (auth?.data?.name) {
       setStore((store) => ({
@@ -154,7 +155,7 @@ const StoreAdd = ({ country, countries }) => {
         name: auth.data.name,
       }));
     }
-  }, [country, auth]);
+  }, [storeData, auth]);
 
   const handleChange = (e) => {
     setStore((store) => ({
@@ -171,7 +172,7 @@ const StoreAdd = ({ country, countries }) => {
   const handleSave = () => {
     const newStore = {
       ...store,
-      country: country._id,
+      country: store.country || storeData._id,
     };
     const { isError, errors } = errorValidation(newStore);
 
@@ -179,6 +180,7 @@ const StoreAdd = ({ country, countries }) => {
       setError(errors);
       return;
     }
+
     if (newStore._id) {
       updateStore({
         id: newStore._id,
@@ -200,7 +202,9 @@ const StoreAdd = ({ country, countries }) => {
   return (
     <div className="w-full bg-white">
       <div className="border-b p-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold">Main Data</h1>
+        <h1 className="text-xl font-bold">
+          {storeData.type === "shipping" ? "Shipping And Goods" : "Main Data"}
+        </h1>
         <Switch value={store.active} onChange={handleSwitch} />
       </div>
       <div className="flex flex-wrap p-4 space-y-3">
@@ -286,10 +290,15 @@ const StoreAdd = ({ country, countries }) => {
                 className="appearance-none outline-0 w-full p-2 bg-white"
                 name="country"
                 id="frm-whatever"
-                value={store.country}
+                value={store.country || store.country?._id}
                 onChange={handleChange}
               >
-                <option value={country._id}>{country.name}</option>
+                <option value={""}>Select Country</option>
+                {countries.map((country) => (
+                  <option key={country._id} value={country._id}>
+                    {country.name}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center px-2 text-gray-700 border-l">
                 <svg
@@ -301,6 +310,9 @@ const StoreAdd = ({ country, countries }) => {
                 </svg>
               </div>
             </div>
+            <p style={{ marginLeft: 1 }} className="text-red-600 text-xs mt-1">
+              {error.country}
+            </p>
           </div>
         </div>
         <div className="w-full">

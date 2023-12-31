@@ -40,6 +40,7 @@ export default function ChatBody({ conversactionId }) {
       [messages[0]?.receiver, messages[0]?.sender],
       data?.email
     );
+
     content = (
       <>
         <ChatHead

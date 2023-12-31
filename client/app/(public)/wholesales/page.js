@@ -12,7 +12,6 @@ export default function WholesalesPagee() {
   });
 
   const { isAuthintication } = useSelector((state) => state.auth);
-  console.log();
 
   return (
     <>
@@ -313,20 +312,22 @@ export default function WholesalesPagee() {
         <h1 className="text-2xl font-semibold text-center py-4">
           Start buying globally for the lowest prices!
         </h1>
-        <div className="grid grid-cols-2 gap-3">
-          <Link
-            href="/dashboard"
-            className="w-32 text-center border-[#207ba2] border bg-white text-[#207ba2] py-3 font-normal text-sm leading-3"
-          >
-            Log in
-          </Link>
-          <Link
-            href="/offers"
-            className="w-32 text-center border bg-[#207ba2] text-white py-3 font-normal text-sm leading-3"
-          >
-            Register
-          </Link>
-        </div>
+        {!isAuthintication && (
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              href="/dashboard"
+              className="w-32 text-center border-[#207ba2] border bg-white text-[#207ba2] py-3 font-normal text-sm leading-3"
+            >
+              Log in
+            </Link>
+            <Link
+              href="/offers"
+              className="w-32 text-center border bg-[#207ba2] text-white py-3 font-normal text-sm leading-3"
+            >
+              Register
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

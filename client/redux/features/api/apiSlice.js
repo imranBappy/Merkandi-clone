@@ -7,7 +7,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     // baseUrl:
     //   process.env.NODE_ENV === "production" ? baseUrl : "http://localhost:5000",
-    baseUrl: "http://192.168.0.118:5000",
+    baseUrl: "http://localhost:5000",
     // baseUrl: "http://13.244.106.99:5000",
 
     prepareHeaders: async (headers, { getState, endpoint }) => {
@@ -40,6 +40,7 @@ export const apiSlice = createApi({
     "Store",
     "Click",
     "Wholesaler",
+    "Order",
   ],
   endpoints: (builder) => ({}),
 });

@@ -5,7 +5,6 @@ import ProductTable from "@/components/admin/ProductTable";
 import { useSelector } from "react-redux";
 export default function Seller() {
   const auth = useSelector((state) => state.auth);
-  console.log(auth);
 
   return (
     <div className="max-w-screen-xl mx-auto py-4 md:px-8">

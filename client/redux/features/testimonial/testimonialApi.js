@@ -12,29 +12,8 @@ export const testimonialApi = apiSlice.injectEndpoints({
       invalidatesTags: ["Testimonial"],
     }),
     getTestimonials: builder.query({
-      query: ({ page = 1, limit = 10 } = {}) => {
-        console.log({
-          url: `${url}?page=${page}&limit=${limit}`,
-        });
-        return `${url}?page=${page}&limit=${limit}`;
-      },
-      // async onQueryStarted(
-      //   { page = 1, limit = 10 } = {  },
-      //   { dispatch, queryFulfilled }
-      // ) {
-      //   try {
-      //     const { data } = await queryFulfilled;
-      //     dispatch(
-      //       apiSlice.util.updateQueryData("getTestimonials", page, (draft) => {
-      //         draft.total = draft.total + data.total;
-      //         draft.testimonials.push(...data.testimonials);
-      //       })
-      //     );
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
-      // },
-
+      query: ({ page = 1, limit = 10 } = {}) =>
+        `${url}?page=${page}&limit=${limit}`,
       providesTags: ["Testimonial"],
     }),
     getTestimonial: builder.query({

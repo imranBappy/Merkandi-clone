@@ -18,12 +18,13 @@ export const storeApi = apiSlice.injectEndpoints({
         user = "",
         active = "",
         Default = "",
+        type = "",
       } = {}) =>
-        `${url}?page=${page}&limit=${limit}&user=${user}&active=${active}&Default=${Default}`,
+        `${url}?page=${page}&limit=${limit}&user=${user}&active=${active}&Default=${Default}&type=${type}`,
       providesTags: ["Store"],
     }),
     getStore: builder.query({
-      query: (country) => `${url}/${country}`,
+      query: (id) => `${url}/${id}`,
       invalidatesTags: ["Store"],
     }),
     updateStore: builder.mutation({

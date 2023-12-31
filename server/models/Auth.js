@@ -27,6 +27,10 @@ const authScheme = Schema(
       trim: true,
       unique: true,
     },
+    phone: {
+      type: String,
+      trim: true,
+    },
     password: {
       type: String,
       required: [true, "Password is require!"],
@@ -55,9 +59,9 @@ const authScheme = Schema(
         ref: "product",
       },
     ],
-    isOnline: {
-      type: Boolean,
-      default: false,
+    country: {
+      type: Types.ObjectId,
+      ref: "country",
     },
   },
   { timestamps: true }

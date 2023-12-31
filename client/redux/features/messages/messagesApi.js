@@ -17,7 +17,7 @@ export const messagesApi = apiSlice.injectEndpoints({
             reconnectionDelay: 1000,
             reconnection: true,
             reconnectionAttemps: 10,
-            // transports: ["websocket"],
+            transports: ["websocket"],
             agent: false,
             upgrade: false,
             rejectUnauthorized: false,
@@ -30,9 +30,11 @@ export const messagesApi = apiSlice.injectEndpoints({
               data.sender.email === authData.email ||
               data.receiver.email === authData.email;
             if (isMyMessage) {
-              updateCachedData((draft) => {
-                draft.messages?.unshift(data);
-              });
+              if (data.conversation === arg.conversactionId) {
+                updateCachedData((draft) => {
+                  draft.messages.unshift(data);
+                });
+              }
             }
           });
         } catch (error) {}

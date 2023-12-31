@@ -1,18 +1,77 @@
-// components/SearchForm.js
+"use client";
+
+import { algolaIndex } from "@/config/algoliaConfig";
+import { addResult } from "@/redux/features/search/searchSlice";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+
 function Search() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // handle Debounce
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchTerm.length > 0) {
+        dispatch(
+          addResult({
+            result: [],
+            isLoading: true,
+          })
+        );
+        const { hits } = await algolaIndex.search(searchTerm);
+        dispatch(
+          addResult({
+            result: hits,
+            isLoading: false,
+          })
+        );
+      } else {
+        dispatch(
+          addResult({
+            result: [],
+            isLoading: false,
+          })
+        );
+      }
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.length > 0) {
+      dispatch(
+        addResult({
+          result: [],
+          isLoading: true,
+        })
+      );
+      const { hits } = algolaIndex.search(searchTerm);
+      dispatch(
+        addResult({
+          result: hits,
+          isLoading: false,
+        })
+      );
+    } else {
+      dispatch(
+        addResult([
+          {
+            result: [],
+            isLoading: false,
+          },
+        ])
+      );
+    }
+  };
+
   return (
-    <form className="w-full">
+    <form onClick={handleSubmit} className="w-full">
       <div className="flex items-center justify-between w-full">
-        <select
-          id="pricingType"
-          name="pricingType"
-          className="hidden md:block w-[120px] h-10 border border-slate-300 focus:outline-none focus:border-slate-300 border-r-0 text-slate-500 px-2 md:px-3 py-0 md:py-1 tracking-wider"
-        >
-          <option value="Products">Products</option>
-          <option value="Purchase quotations">Purchase quotations</option>
-          <option value="Stock offers">Stock offers</option>
-        </select>
         <input
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           type="text"
           placeholder="Search for the tool you like"
           className="w-full px-3 h-10 border border-slate-300 focus:outline-none focus:border-slate-300"

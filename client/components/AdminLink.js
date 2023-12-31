@@ -1,6 +1,7 @@
 // components/Horizontal.js
 import { useState } from "react";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import Link from 'next/link'
 
 const AdminLink = ({ defaultTitle, defaultIcon, items }) => {
   const [open, setOpen] = useState(false);
@@ -25,9 +26,9 @@ const AdminLink = ({ defaultTitle, defaultIcon, items }) => {
         <ul className="flex flex-col divide-y">
           {items.map((item, index) => (
             <li key={index} className="p-2 block bg-gray-100 hover:bg-gray-200">
-              <a href={item.link} className="block">
+              <Link href={item.link} className="block">
                 {item.title}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

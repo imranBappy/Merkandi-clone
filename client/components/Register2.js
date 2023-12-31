@@ -54,7 +54,7 @@ function Register2() {
             These are net prices, which are subject to VAT rate in line with EU
             directive.
           </p>
-          <Link href="#">
+          <Link href="/register/create?plan=premium">
             <p className="bg-yellow-500 text-white w-full py-2 px-4 block text-center font-bold text-2xl uppercase rounded">
               Register
             </p>
@@ -79,7 +79,7 @@ function Register2() {
             These are net prices, which are subject to VAT rate in line with EU
             directive.
           </p>
-          <Link href="#">
+          <Link href="/register/create?plan=premium">
             <p className="bg-yellow-500 text-white w-full py-2 px-4 block text-center font-bold text-2xl uppercase rounded">
               Register
             </p>

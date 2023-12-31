@@ -5,11 +5,7 @@ const isAuthenticated =
     try {
       const { authorization } = req.headers;
       if (!authorization) return next("User Unauthorized");
-      const decode = jwt.verify(
-        authorization,
-        // process.env.JWT_SECRET,
-        "F675EF787EC393B121B13742CC32"
-      );
+      const decode = jwt.verify(authorization, process.env.JWT_SECRET);
 
       if (!decode) return next("User Unauthorized");
       if (!role.includes(decode?.data?.role)) {
@@ -20,7 +16,6 @@ const isAuthenticated =
       req.role = decode?.data.role;
       next();
     } catch (error) {
-      console.log({ error });
       error.status = 401;
       next(error);
     }

@@ -345,6 +345,21 @@ function LeftUser() {
           <b className="text-sm p-2 border-b uppercase">SHOPPING</b>
 
           <Link
+            href="/dashboard/shopping/myOrder"
+            className="text-slate-500 p-2 border-b hover:bg-gray-200 flex items-center gap-2"
+          >
+            <LiaTachometerAltSolid fontSize={25} />
+            My order
+          </Link>
+
+          <Link
+            href="/dashboard/shopping/receiveOrder"
+            className="text-slate-500 p-2 border-b hover:bg-gray-200 flex items-center gap-2"
+          >
+            <LiaTachometerAltSolid fontSize={25} />
+            Receive Order
+          </Link>
+          <Link
             href="/dashboard/shopping/click/product"
             className="text-slate-500 p-2 border-b hover:bg-gray-200 flex items-center gap-2"
           >

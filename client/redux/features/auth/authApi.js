@@ -10,21 +10,6 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
-      async onQueryStarted(
-        _,
-        { dispatch, queryFulfilled, queryRejected, requestId }
-      ) {
-        try {
-          const result = await queryFulfilled;
-          console.log(16, result.data);
-          localStorage.setItem("auth", JSON.stringify(result.data));
-          dispatch(userLoggedIn(result.data));
-        } catch (error) {
-          console.log(error);
-          // toast.error(error.error.data.error);
-          // queryRejected(error);
-        }
-      },
     }),
     signin: builder.mutation({
       query: (body) => ({
