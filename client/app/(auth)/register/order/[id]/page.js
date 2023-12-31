@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Paypal from "./Paypal";
 import Stripe from "./Stripe";
 import { useSearchParams } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const query = useSearchParams();
   const paymentType = query.get("paymentType");
 
@@ -27,4 +27,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

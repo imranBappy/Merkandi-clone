@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-const page = () => {
+const Page = () => {
   const { order } = useSelector((state) => state.order);
   const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
@@ -152,4 +152,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

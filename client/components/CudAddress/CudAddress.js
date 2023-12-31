@@ -1,10 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Switch from "../common/Input/Switch";
 import { useSelector } from "react-redux";
 import TextInput from "../common/Input/TextInput";
 import TextboxInput from "../common/Input/TextboxInput";
-import Button from "../common/Button/Button";
 import {
   usePostStoreMutation,
   useUpdateStoreMutation,
@@ -274,7 +272,9 @@ const CudAddress = ({ storeData, countries, onClick }) => {
               >
                 <option value={""}>Select Country</option>
                 {countries.map((country) => (
-                  <option value={country._id}>{country.name}</option>
+                  <option key={country._id} value={country._id}>
+                    {country.name}
+                  </option>
                 ))}
               </select>
               <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center px-2 text-gray-700 border-l">

@@ -26,7 +26,6 @@ const Dropdown = ({ buttonText, options, position = "right" }) => {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeLinejoin="2"
             d="M19 9l-7 7-7-7"
           />
         </svg>
