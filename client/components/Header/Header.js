@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import useLogout from "@/hooks/useLogout";
 import useAuthCheck from "@/hooks/useAuthCheck";
 import Script from "next/script";
+import { LanguageSwitcher } from "../lang/LangSwitcher";
 
 const Header = () => {
   const [showNev2, setShowNev2] = useState(false);
@@ -25,14 +26,8 @@ const Header = () => {
 
   return (
     <>
-      <Script
-        src="/assets/scripts/lang-config.js"
-        strategy="beforeInteractive"
-      />
-      <Script
-        src="/assets/scripts/translation.js"
-        strategy="beforeInteractive"
-      />
+      <Script src="/assets/scripts/lang-config.js" />
+      <Script src="/assets/scripts/translation.js" />
       <Script
         src="//translate.google.com/translate_a/element.js?cb=TranslateInit"
         strategy="afterInteractive"
@@ -98,7 +93,7 @@ const Header = () => {
         <div className="bg-[#1c1c1c]">
           <div className="flex items-center justify-between max-w-screen-xl mx-auto py-1 md:px-8">
             <div>
-              <Dropdown
+              {/* <Dropdown
                 buttonText="For buyers"
                 position="left"
                 options={[
@@ -121,17 +116,19 @@ const Header = () => {
                   { label: "Guidelines", url: "#" },
                   { label: "Contact Merkandi", url: "#" },
                 ]}
-              />
+              /> */}
             </div>
             <div>
               <Dropdown
                 buttonText="$ USD"
                 position="right"
-                options={[
-                  { label: "$ USD", url: "#" },
-                  { label: "$ USD", url: "#" },
-                ]}
+                // options={[
+                //   { label: "$ USD", url: "#" },
+                //   { label: "$ USD", url: "#" },
+                // ]}
               />
+
+              {/* <LanguageSwitcher/> */}
             </div>
           </div>
         </div>

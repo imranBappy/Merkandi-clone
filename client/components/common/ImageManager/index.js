@@ -48,7 +48,7 @@ const ImageManager = ({
       }
     }, 500);
     return () => clearTimeout(timer);
-  }, [term]);
+  }, [term, dispatch]);
 
   const handleSearch = (e) => {
     e.preventDefault();

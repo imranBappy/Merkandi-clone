@@ -49,7 +49,7 @@ const Page = () => {
     if (order) {
       dispatch(addOrder(order));
     }
-  }, []);
+  }, [dispatch, order]);
 
   useEffect(() => {
     if (orderIsSuccess) {
@@ -66,7 +66,7 @@ const Page = () => {
       });
       router.push("/order");
     }
-  }, [orderIsSuccess]);
+  }, [orderIsSuccess, dispatch, router]);
 
   const submitOrder = () => {
     if (!payload.address) {

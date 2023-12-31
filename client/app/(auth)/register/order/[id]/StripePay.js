@@ -52,7 +52,7 @@ const StripePay = () => {
           break;
       }
     });
-  }, [stripe, query]);
+  }, [stripe, query, message, verifyPayment]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

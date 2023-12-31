@@ -159,7 +159,7 @@ const Registation = () => {
         message: error.data,
       });
     }
-  }, [isSuccess, isError, error?.data, data?._id]);
+  }, [isSuccess, isError, error?.data, data?._id, params, router]);
 
   return (
     <form

@@ -70,10 +70,8 @@ export default function AddProduct({ isAmin = true }) {
     updateProduct,
     { isLoading: updateLoading, error: updateError, isSuccess: updateSuccess },
   ] = useUpdateProductMutation();
-  const [
-    addProduct,
-    { data, isLoading, error: productError, isError, isSuccess },
-  ] = usePostProductMutation();
+  const [addProduct, { isLoading, error: productError, isError, isSuccess }] =
+    usePostProductMutation();
 
   useEffect(() => {
     if (id) {
@@ -107,12 +105,10 @@ export default function AddProduct({ isAmin = true }) {
         type: "success",
         message: "Added successfully",
       });
-
       setProduct(productInit);
       setImage([]);
       setGallery([]);
     } else if (productError) {
-      console.log(productError);
       Toaster({
         type: "error",
         message: productError?.data || "Something went wrong",

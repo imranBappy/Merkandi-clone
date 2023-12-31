@@ -1,12 +1,9 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { parseCookies, setCookie } from "nookies";
-import Link from "next/link";
 
 const COOKIE_NAME = "googtrans";
-
-const LanguageSwitcher = () => {
+const LanguageSwitcher = (props) => {
   const [currentLanguage, setCurrentLanguage] = useState();
   const [languageConfig, setLanguageConfig] = useState();
 
@@ -39,6 +36,9 @@ const LanguageSwitcher = () => {
   const switchLanguage = (lang) => () => {
     setCookie(null, COOKIE_NAME, `/auto/${lang}`);
     window.location.reload();
+    if (props.onChange) {
+      props.onChange(lang);
+    }
   };
 
   return (

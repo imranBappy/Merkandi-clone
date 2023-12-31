@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/common/Button/Button";
 import { useCreateStripePaymentMutation } from "@/redux/features/payment/paymentApi";
@@ -33,7 +33,7 @@ const Stripe = () => {
         `/register/order/${params.id}?paymentType=stripe&payment_intent_client_secret=${data.client_secret}`
       );
     }
-  }, [isSuccess, data?.client_secret]);
+  }, [isSuccess, data?.client_secret, params.id, router]);
 
   const options = {
     clientSecret: clientSecret,

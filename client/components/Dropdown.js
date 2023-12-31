@@ -1,4 +1,6 @@
 // components/Dropdown.js
+"use client";
+
 import Link from "next/link";
 import { useState } from "react";
 import { LanguageSwitcher } from "./lang/LangSwitcher";
@@ -8,6 +10,8 @@ const Dropdown = ({ buttonText, options, position = "right" }) => {
 
   const dropdownPosition = position === "left" ? "left-0" : "right-0";
 
+  const [currentLanguage, setCurrentLanguage] = useState("en");
+
   return (
     <div className="relative inline-block text-left">
       <button
@@ -15,7 +19,7 @@ const Dropdown = ({ buttonText, options, position = "right" }) => {
         className="flex items-center px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {buttonText}
+        {currentLanguage?.toLocaleUpperCase()}
         <svg
           className="h-4 w-4 ml-2"
           xmlns="http://www.w3.org/2000/svg"
@@ -33,13 +37,13 @@ const Dropdown = ({ buttonText, options, position = "right" }) => {
 
       {isOpen && (
         <div
-          className={`absolute mt-0 w-56 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg focus:outline-none ${dropdownPosition}`}
+          className={`absolute z-50 mt-0 w-56 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg focus:outline-none ${dropdownPosition}`}
           role="menu"
           aria-orientation="vertical"
         >
           <div className="py-0">
-            <LanguageSwitcher />
-            {/* {options.map((option, index) => (
+            <LanguageSwitcher onChange={(lang) => setCurrentLanguage(lang)} />
+            {options?.map((option, index) => (
               <Link
                 key={index}
                 href={option.url}
@@ -48,7 +52,7 @@ const Dropdown = ({ buttonText, options, position = "right" }) => {
               >
                 {option.label}
               </Link>
-            ))} */}
+            ))}
           </div>
         </div>
       )}
